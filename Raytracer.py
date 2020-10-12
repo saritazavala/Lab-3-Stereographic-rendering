@@ -200,14 +200,7 @@ class Raytracer(object):
 
       return material, intersect
 
-    def Tridementional_function(self):
-      pass
-
-
-
-
-
-    def render(self,stereogram=False):
+    def render(self,this=False):
       fun = int(math.pi / 2)
       for y in range(self.height):
         for x in range(self.width):
@@ -215,15 +208,13 @@ class Raytracer(object):
           j = (2 * (y + 0.5) / self.height - 1) * math.tan(fun / 2)
           direction = norm(V3(i, j, -1))
 
-          if (stereogram):
-            eye1 = self.cast_ray(V3(0.35, 0, 0), direction)
-            eye2 = self.cast_ray(V3(-0.35, 0, 0), direction)
-            if not eye1.equals(self.change_color):
-              eye1 = eye1 * 0.57 + color(100, 0, 0)  # times 0.57 for it to not exceed 255
-            if not eye2.equals(self.change_color):
-              eye2 = eye2 * 0.57 + color(0, 0, 100)  # times 0.57 for it to not exceed 255
-            eye_sum = eye1 + eye2
-            self.framebuffer[y][x] = eye_sum
+          if (this):
+            red_bear = self.cast_ray(V3(0.35, 0, 0), direction)
+            blue_bear = self.cast_ray(V3(-0.35, 0, 0), direction)
+            if not red_bear.equals(self.change_color):red_bear = red_bear * 0.55 + color(100, 0, 0)
+            if not blue_bear.equals(self.change_color):blue_year = blue_bear * 0.55 + color(0, 0, 100)
+            group = red_bear + blue_bear
+            self.framebuffer[y][x] = group
           else:
             self.framebuffer[y][x] = self.cast_ray(V3(1, 0, 0), direction)
 
@@ -284,5 +275,5 @@ r.scene = [
   # Sphere(V3(-2, 2, -10), 2, ivory)
 ]
 
-r.render(stereogram=True)
+r.render(True)
 r.glFinish()
