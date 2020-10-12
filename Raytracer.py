@@ -200,15 +200,32 @@ class Raytracer(object):
 
       return material, intersect
 
+    def Tridementional_function(self):
+      pass
 
-    def render(self):
+
+
+
+
+    def render(self,stereogram=False):
       fun = int(math.pi / 2)
       for y in range(self.height):
         for x in range(self.width):
           i = (2 * (x + 0.5) / self.width - 1) * math.tan(fun / 2) * self.width / self.height
           j = (2 * (y + 0.5) / self.height - 1) * math.tan(fun / 2)
           direction = norm(V3(i, j, -1))
-          self.framebuffer[y][x] = self.cast_ray(V3(0, 0, 0), direction)
+
+          if (stereogram):
+            eye1 = self.cast_ray(V3(0.35, 0, 0), direction)
+            eye2 = self.cast_ray(V3(-0.35, 0, 0), direction)
+            if not eye1.equals(self.change_color):
+              eye1 = eye1 * 0.57 + color(100, 0, 0)  # times 0.57 for it to not exceed 255
+            if not eye2.equals(self.change_color):
+              eye2 = eye2 * 0.57 + color(0, 0, 100)  # times 0.57 for it to not exceed 255
+            eye_sum = eye1 + eye2
+            self.framebuffer[y][x] = eye_sum
+          else:
+            self.framebuffer[y][x] = self.cast_ray(V3(1, 0, 0), direction)
 
 
 #Create ---------------------------------------------------------
@@ -216,6 +233,12 @@ ivory = Material(diffuse=color(100, 100, 80), albedo=(0.6, 0.3, 0.1, 0), spec=50
 rubber = Material(diffuse=color(80, 0, 0), albedo=(0.9, 0.1, 0, 0, 0), spec=10)
 mirror = Material(diffuse=color(255, 255, 255), albedo=(0, 10, 0.8, 0), spec=1425)
 glass = Material(diffuse=color(150, 180, 200), albedo=(0, 0.5, 0.1, 0.8), spec=125, refractive_index=1.5)
+
+brown = Material(diffuse=color(186,91,41), albedo=(0.9, 0.1, 0, 0, 0),spec=10)
+light_brown = Material(diffuse=color(235,169,133), albedo=(0.9, 0.1, 0, 0, 0),spec=11)
+red = Material(diffuse=color(217,41,41), albedo=(0.9, 0.1, 0, 0, 0), spec=10)
+green = Material(diffuse=color(177,191,69), albedo=(0.9, 0.1, 0, 0, 0), spec=10)
+
 
 
 r = Raytracer('Lab3.bmp')
@@ -235,25 +258,25 @@ r.scene = [
   Sphere(V3(0.5, 2.5, -8), 0.125, rubber),
 
   # ears
-  Sphere(V3(-1, 3.5, -10), 0.75, ivory),
-  Sphere(V3(1.5, 3.5, -10), 0.75, ivory),
+  Sphere(V3(-1, 3.5, -10), 0.75, brown),
+  Sphere(V3(1.5, 3.5, -10), 0.75, brown),
   #
   # #Head
-  Sphere(V3(0, 2.25, -10), 1.5, ivory),
+  Sphere(V3(0, 2.25, -10), 1.5, light_brown),
   #
 
   # Mouth
-  Sphere(V3(0, 1.75, -8), 0.5, ivory),
+  Sphere(V3(0, 1.75, -8), 0.5, brown),
   # #body
   Sphere(V3(0, -1.15, -10), 2.25, rubber),
   #
   # #Upper Paws
-  Sphere(V3(1.5, 0, -8.5), 0.65, ivory),
-  Sphere(V3(-1.65, 0, -8.5), 0.65, ivory),
+  Sphere(V3(1.5, 0, -8.5), 0.65, brown),
+  Sphere(V3(-1.65, 0, -8.5), 0.65, brown),
   #
   # #Lower paws
-  Sphere(V3(1.25, -2, -7.5), 0.75, ivory),
-  Sphere(V3(-1.5, -2, -7.5), 0.75, ivory),
+  Sphere(V3(1.25, -2, -7.5), 0.75, light_brown),
+  Sphere(V3(-1.5, -2, -7.5), 0.75, light_brown),
 
   # Sphere(V3(0, -1.5, -10), 1.5, rubber),
   # Sphere(V3(-2, -1, -12), 2, glass),
@@ -261,5 +284,5 @@ r.scene = [
   # Sphere(V3(-2, 2, -10), 2, ivory)
 ]
 
-r.render()
+r.render(stereogram=True)
 r.glFinish()

@@ -21,6 +21,9 @@ class color(object):
     self.g = g
     self.b = b
 
+  def equals(self, other):
+    return (self.r==other.r and self.g==other.g and self.b==other.b)
+
   def __add__(self, other_color):
     r = self.r + other_color.r
     g = self.g + other_color.g
