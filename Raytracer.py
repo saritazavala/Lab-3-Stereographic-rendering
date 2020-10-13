@@ -207,12 +207,11 @@ class Raytracer(object):
           i = (2 * (x + 0.5) / self.width - 1) * math.tan(fun / 2) * self.width / self.height
           j = (2 * (y + 0.5) / self.height - 1) * math.tan(fun / 2)
           direction = norm(V3(i, j, -1))
-
           if (this):
             red_bear = self.cast_ray(V3(0.35, 0, 0), direction)
             blue_bear = self.cast_ray(V3(-0.35, 0, 0), direction)
             if not red_bear.equals(self.change_color):red_bear = red_bear * 0.55 + color(100, 0, 0)
-            if not blue_bear.equals(self.change_color):blue_year = blue_bear * 0.55 + color(0, 0, 100)
+            if not blue_bear.equals(self.change_color):blue_bear = blue_bear * 0.55 + color(0, 0, 100)
             group = red_bear + blue_bear
             self.framebuffer[y][x] = group
           else:
